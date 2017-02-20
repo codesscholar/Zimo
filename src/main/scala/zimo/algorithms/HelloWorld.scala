@@ -7,5 +7,6 @@ object HelloWorld {
   def sayHello(message: String): Unit = {
     println("Hello, " + message)
     println("AAA")
+    println("BB")
   }
 }
