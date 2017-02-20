@@ -24,7 +24,14 @@ object AuthorityScoreAlgorithm {
     null
   }
 
-
+  /**
+    * calculate the Authority Score, the update rule is newAuth = SUM(lastHub), which means node A.auth update as the sum
+    * of hub of all its neighbour which
+    * @param edgeRDD
+    * @param vertexRDD
+    * @param normType
+    * @return
+    */
   private def calculateAuthorityScore(edgeRDD: RDD[EdgeType],
                                       vertexRDD: RDD[VertexType],
                                       normType: Boolean): RDD[VertexType] = {
@@ -48,5 +55,15 @@ object AuthorityScoreAlgorithm {
           case (a, b) => if (a > b) a else b
         }
     }
+
+    vertexRDD
+      .map(e => (e.srcId, e.value))
+      .leftOuterJoin(joinRDD)
+      .map {
+        case (key, (left, right)) => {
+          val updateAuth = right.getOrElse(Tuple2(key, 0.0))._2 / norm
+          new VertexType(key, (updateAuth, left._2, left._3, left._4))
+        }
+      }
   }
 }
