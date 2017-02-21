@@ -6,6 +6,8 @@ import org.apache.spark.rdd.RDD
 import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, Map}
 
+import SerializableHadleObject.{serializeMap => SM, derializeMap => DM }
+
 /**
   * Created by wzp on 17-02-20.
   */
